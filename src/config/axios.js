@@ -1,7 +1,7 @@
-import axios from 'axios';
+const axios = require('axios').default;
 
 const clienteAxios = axios.create({
-    baseURL: 'https://localhost:2000',
+    baseURL: 'http://localhost:2000'
   });
 
 export default clienteAxios;
