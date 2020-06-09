@@ -1,11 +1,17 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 
+// Importar el Layout
+import Header from './componentes/layout/Header';
 
 function App() {
   return(
-    <h1>Hola</h1>
+    <Fragment>
+      <Header />
+    </Fragment>
+
   )
 }
+
 
 
 export default App;
