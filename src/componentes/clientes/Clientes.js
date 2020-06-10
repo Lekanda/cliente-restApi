@@ -2,7 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 // Importar cliente Axios
 import clienteAxios from '../../config/axios';
 
-
+import  Cliente from './Cliente';
 function Clientes () {
     // Trabajar con el State
     // clientes = State
@@ -28,8 +28,12 @@ function Clientes () {
 
     function createArray(clientes) {
         if (clientes && clientes.length > 0) {
-          return clientes.map(cliente => console.log(cliente)
-          );
+          return clientes.map(cliente => (
+              <Cliente 
+                key={cliente._id}
+                cliente={cliente}
+              />
+          ));
         }
         return [];
       }
