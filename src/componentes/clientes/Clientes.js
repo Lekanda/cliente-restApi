@@ -3,6 +3,10 @@ import React, { useEffect, useState, Fragment } from 'react';
 import clienteAxios from '../../config/axios';
 
 import  Cliente from './Cliente';
+
+import { Link } from 'react-router-dom';
+
+
 function Clientes () {
     // Trabajar con el State
     // clientes = State
@@ -46,7 +50,9 @@ function Clientes () {
             <h2>Clientes</h2>
             {/* {console.log(clientes)} */}
             {/* {console.log(guardarClientes)} */}
-            
+            <Link to="/clientes/nuevo" className="btn btn-verde nvo-cliente"> <i className="fas fa-plus-circle"></i>
+                Nuevo Cliente
+            </Link >
             <ul className="listado-clientes">
                 {createArray(clientes)}
             </ul>
