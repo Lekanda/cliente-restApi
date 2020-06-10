@@ -45,6 +45,38 @@ function EditarCliente(props) {
             ...cliente,
             [e.target.name] : e.target.value
         })
+    };
+
+    // Actualizar el cliente por Axios
+    const actualizarCliente = e => {
+        e.preventDefault();
+
+        // Enviar peticion por Axios
+        clienteAxios.put(`/clientes/${cliente._id}`, cliente)
+            .then(res => {
+                if(res.data.code === 11000) {
+                    console.log('Error de duplicado de Mongo');
+                    Swal.fire({
+                        
+                        title: 'Hubo un Error!',
+                        text: 'El Cliente ya esta registrado',
+                        icon: 'warning',
+                        // imageUrl: 'https://unsplash.it/400/200',
+                        // imageWidth: 200,
+                        // imageHeight: 100,
+                    })
+                }else{
+                    console.log(res.data);
+                    Swal.fire(
+                        'Correcto',
+                        'Se actualizo correctamente',
+                        'success'
+                    )
+                }
+
+                // Redireccionar
+                props.history.push('/');
+            })
     }
 
 
@@ -63,7 +95,9 @@ function EditarCliente(props) {
     return (
         <Fragment>
             <h2>Editar Cliente</h2>
-            <form>
+            <form
+                onSubmit={actualizarCliente}
+            >
                     <legend>Actualiza los campos deseados</legend>
                     <div className="campo">
                         <label>Nombre:</label>
