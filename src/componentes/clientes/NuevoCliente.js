@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-
+import clienteAxios from '../../config/axios';
 function NuevoCliente() {
     // Cliente = State
     //guaradrCliente = funcion para guardar el State
@@ -27,22 +27,42 @@ function NuevoCliente() {
     }
 
 
+    // Añade a  la RESTAPI un cliente nuevo
+    const agregarCliente = e => {
+        e.preventDefault();
+
+        // Enviar peticion a xios
+        clienteAxios.post('/clientes', cliente)
+            .then(res => {
+                // console.log(res);
+                // Validar sí hay errores de Mongo
+                if(res.data.code === 11000) {
+                    console.log('Error de duplicado de Mongo');
+                }else{
+                    console.log(res.data);
+                    
+                }
+            });
+    }
+
+
     // Validar el Formulario
     const validarCliente = () => {
         // Destructuring al State
         const { nombre, apellido, email, empresa, telefono } = cliente;
         // Revisar que las propiedades del objeto tengan contenido
         let valido = !nombre.length || !apellido.length || !email.length || !empresa.length || !telefono.length;
-        
 
 
-        // Return truue o false
+        // Return true o false
         return valido;
     }
     return (
         <Fragment>
             <h2>Nuevo Cliente</h2>
-            <form >
+            <form 
+                onSubmit={agregarCliente}
+            >
                     <legend>Llena todos los campos</legend>
                     <div className="campo">
                         <label>Nombre:</label>
@@ -82,7 +102,7 @@ function NuevoCliente() {
 
                     <div className="campo">
                         <label>Teléfono:</label>
-                        <input  type="email" 
+                        <input  type="tel" 
                                 placeholder="Teléfono Cliente" 
                                 name="telefono" 
                                 onChange={actualizarState}
