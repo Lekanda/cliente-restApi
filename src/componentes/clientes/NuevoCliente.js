@@ -1,6 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import clienteAxios from '../../config/axios';
-function NuevoCliente() {
+import Swal from 'sweetalert2';
+import { withRouter } from 'react-router-dom';
+
+
+function NuevoCliente({history}) {
     // Cliente = State
     //guaradrCliente = funcion para guardar el State
     const[cliente, guardarCliente]  = useState({
@@ -38,10 +42,26 @@ function NuevoCliente() {
                 // Validar sí hay errores de Mongo
                 if(res.data.code === 11000) {
                     console.log('Error de duplicado de Mongo');
+                    Swal.fire({
+                        
+                        title: 'Hubo un Error!',
+                        text: 'El Cliente ya esta registrado',
+                        icon: 'warning',
+                        // imageUrl: 'https://unsplash.it/400/200',
+                        // imageWidth: 200,
+                        // imageHeight: 100,
+                    })
                 }else{
                     console.log(res.data);
-                    
+                    Swal.fire(
+                        'Cliente Guardado!',
+                        res.data.mensaje,
+                        'success'
+                    )
                 }
+                // Redireccionar
+                history.push('/');
+
             });
     }
 
@@ -121,4 +141,5 @@ function NuevoCliente() {
     )
 }
 
-export default NuevoCliente;
+// HOC. Es un afuncion que toma uun componente y retorna un nuuevo componente
+export default withRouter(NuevoCliente);
