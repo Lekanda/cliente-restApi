@@ -7,7 +7,7 @@ function Clientes () {
     // Trabajar con el State
     // clientes = State
     // guardarClientes = Funcion para guardar el State
-    const [clientes, guardarClientes] = useState({});
+    const [clientes, guardarClientes] = useState([]);
 
 
     //Query a la API
@@ -29,6 +29,7 @@ function Clientes () {
     function createArray(clientes) {
         if (clientes && clientes.length > 0) {
           return clientes.map(cliente => (
+            
               <Cliente 
                 key={cliente._id}
                 cliente={cliente}
