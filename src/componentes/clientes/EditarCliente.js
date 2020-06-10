@@ -1,18 +1,19 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
+import Cliente from './Cliente';
 
 
 function EditarCliente(props) {
     // Obtener el ID
     const { id } = props.match.params;
 
-    console.log(id);
+    // console.log(id);
 
     // Cliente = State
-    //guaradrCliente = funcion para guardar el State
-    const[cliente, guardarCliente]  = useState({
+    //guardarCliente = funcion para guardar el State
+    const[cliente, datosCliente]  = useState({
         nombre: '',
         apellido: '',
         empresa: '',
@@ -21,10 +22,25 @@ function EditarCliente(props) {
     });
 
 
+    // Query a la API
+    const consultarAPI = async () => {
+        const clienteconsulta = await clienteAxios.get(`/clientes/${id}`);
+        // console.log(clienteconsulta.data);
+        
+        // Colocar en el State
+        datosCliente(clienteconsulta.data)
+    }
+
+    //useEffect , cuando el componente carga
+    useEffect( () => {
+        consultarAPI();
+    }, []);
+
+
     // Leer los datosdel formulario
     const actualizarState = e => {
         // Almacenamos lo que el usuario escribe en el State
-        guardarCliente({
+        datosCliente({
             // Obtener una copia del State actual
             ...cliente,
             [e.target.name] : e.target.value
@@ -51,10 +67,11 @@ function EditarCliente(props) {
                     <legend>Actualiza los campos deseados</legend>
                     <div className="campo">
                         <label>Nombre:</label>
-                        <input  type="text" 
+                        <input  type="text"
                                 placeholder="Nombre Cliente" 
                                 name="nombre" 
                                 onChange={actualizarState}
+                                value={cliente.nombre}
                         />
                     </div>
 
@@ -64,6 +81,7 @@ function EditarCliente(props) {
                                 placeholder="Apellido Cliente" 
                                 name="apellido" 
                                 onChange={actualizarState}
+                                value={cliente.apellido}
                         />
                     </div>
                 
@@ -73,6 +91,7 @@ function EditarCliente(props) {
                                 placeholder="Empresa Cliente" 
                                 name="empresa" 
                                 onChange={actualizarState}
+                                value={cliente.empresa}
                         />
                     </div>
 
@@ -82,6 +101,7 @@ function EditarCliente(props) {
                                 placeholder="Email Cliente" 
                                 name="email" 
                                 onChange={actualizarState}
+                                value={cliente.email}
                         />
                     </div>
 
@@ -91,13 +111,14 @@ function EditarCliente(props) {
                                 placeholder="Teléfono Cliente" 
                                 name="telefono" 
                                 onChange={actualizarState}
+                                value={cliente.telefono}
                         />
                     </div>
 
                     <div className="enviar">
                             <input  type="submit" 
                                     className="btn btn-azul" 
-                                    value="Agregar Cliente"
+                                    value="Editar Cliente"
                                     disabled={ validarCliente() } 
                     />
                     </div>
