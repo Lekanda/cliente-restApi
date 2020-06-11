@@ -2,6 +2,7 @@ import React, {useEffect, useState, Fragment} from 'react';
 import {Link} from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import Producto from './Producto';
+import Spinner from '../layout/Spinner';
 
 function Productos () {
     // produuctos= state ; guaradrProduuctos= funcion para guardar el State
@@ -35,7 +36,10 @@ function Productos () {
         return [];
       }
 
-
+      // Spinner de carga
+      if (!productos.length) {
+        return <Spinner />
+      }
 
     return (
         <Fragment>
