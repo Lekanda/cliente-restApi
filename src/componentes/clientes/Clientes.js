@@ -25,6 +25,7 @@ function Clientes () {
     }
 
     //  Use effect es similar a componentdidmount y willmount
+    // Cuando carga ejecuta consultarAPI()
     useEffect( () => {
         consultarAPI();
     }, [clientes] );
