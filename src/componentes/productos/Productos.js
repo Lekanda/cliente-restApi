@@ -17,7 +17,7 @@ function Productos () {
         }
         // llamada API
         consultarAPI();
-    }, []);
+    }, [productos]);// productos: para que actualice despues de borrar en API
 
 
 

@@ -1,13 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import clienteAxios from '../../config/axios'
+
 
 function NuevoProducto ({producto}) {
     // console.log(producto);
 
     // Eliminar Producto
     const eliminarProducto = id => {
-        console.log('Eliminando...', id);
-        
+        Swal.fire({
+            title: '¿Estas Seguro?',
+            text: "No se podra recuperar el producto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Borralo!',
+            cancelButtonText: 'No lo Borres!'
+          }).then((result) => {
+            if (result.value) {
+                // Eliminar en la RESTAPI
+                clienteAxios.delete(`/productos/${id}`)
+                    .then(res => {
+                        if(res.status === 200) {// correcto. Se elimino
+                            Swal.fire(
+                                'Borrado!',
+                                res.data.mensaje,
+                                'success'
+                            )
+                        }
+                    })
+            }
+          })
     }
 
 
