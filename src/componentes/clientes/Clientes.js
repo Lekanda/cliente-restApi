@@ -27,7 +27,7 @@ function Clientes () {
     //  Use effect es similar a componentdidmount y willmount
     useEffect( () => {
         consultarAPI();
-    }, [] );
+    }, [clientes] );
 
 
     function createArray(clientes) {
