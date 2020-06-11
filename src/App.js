@@ -11,7 +11,13 @@ import Navegacion from './componentes/layout/Navegacion';
 import Clientes from './componentes/clientes/Clientes';
 import NuevoCliente from './componentes/clientes/NuevoCliente';
 import Pedidos from './componentes/pedidos/Pedidos';
+
 import Productos from './componentes/productos/Productos';
+// import Producto from './componentes/productos/Producto';
+import EditarProducto from './componentes/productos/EditarProducto';
+import NuevoProducto from './componentes/productos/NuevoProducto';
+
+
 import EditarCliente from './componentes/clientes/EditarCliente';
 
 
@@ -27,7 +33,11 @@ function App() {
                     <Route exact path="/" component={Clientes} />
                     <Route exact path="/clientes/nuevo" component={NuevoCliente} />
                     <Route exact path="/clientes/editar/:id" component={EditarCliente} />
+                    
                     <Route exact path="/productos" component={Productos} />
+                    <Route exact path="/productos/nuevo" component={NuevoProducto} />
+                    <Route exact path="/productos/editar/:id" component={EditarProducto} />
+
                     <Route exact path="/pedidos" component={Pedidos} />
                   </Switch>
               </main>
