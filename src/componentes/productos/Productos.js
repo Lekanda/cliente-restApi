@@ -1,6 +1,7 @@
 import React, {useEffect, useState, Fragment} from 'react';
 import {Link} from 'react-router-dom';
 import clienteAxios from '../../config/axios';
+import Producto from './Producto';
 
 function Productos () {
     // produuctos= state ; guaradrProduuctos= funcion para guardar el State
@@ -11,12 +12,28 @@ function Productos () {
         // Query a la API
         const consultarAPI = async () => {
             const productosConsulta = await clienteAxios.get('/productos/');
-            // console.log(productosConsulta);
-            guardarProductos(productosConsulta); 
+            // console.log(productosConsulta.data.productos);
+            guardarProductos(productosConsulta.data.productos); 
         }
         // llamada API
         consultarAPI();
     }, []);
+
+
+
+    //
+    function createArray(productos) {
+        if (productos && productos.length > 0) {
+          return productos.map(producto => (
+            
+              <Producto 
+                key={producto._id}
+                producto={producto}
+              />
+          ));
+        }
+        return [];
+      }
 
 
 
@@ -30,24 +47,7 @@ function Productos () {
                 </Link>
 
                 <ul className="listado-productos">
-                    <li className="producto">
-                        <div className="info-producto">
-                            <p className="nombre">VueJS</p>
-                            <p className="precio">$25.00 </p>
-                            <img src="img/1.jpg" />
-                        </div>
-                        <div className="acciones">
-                            <Link to={'/productos/editar'} className="btn btn-azul">
-                                <i className="fas fa-pen-alt"></i>
-                                Editar Producto
-                            </Link>
-
-                            <button type="button" className="btn btn-rojo btn-eliminar">
-                                <i className="fas fa-times"></i>
-                                Eliminar Cliente
-                            </button>
-                        </div>
-                    </li>
+                    {createArray(productos)}
                 </ul>
         </Fragment>
     )
