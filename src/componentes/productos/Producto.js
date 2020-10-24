@@ -48,7 +48,7 @@ function NuevoProducto ({producto}) {
                 ) : null }
             </div>
             <div className="acciones">
-                <Link to={'/productos/editar/${_id}'} className="btn btn-azul">
+                <Link to={`/productos/editar/${_id}`}           className="btn btn-azul">   
                     <i className="fas fa-pen-alt"></i>
                     Editar Producto
                 </Link>
