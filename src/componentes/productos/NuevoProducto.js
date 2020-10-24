@@ -13,26 +13,27 @@ function NuevoProducto () {
         nombre: '',
         precio: ''
     }); 
-    // archivo=state, guardarArchivo= setState
+    // archivo(imagen)=state, guardarArchivo= setState
     const [archivo, guardarArchivo] = useState('');
 
     // Leer los datos del formulario
     const leerInformacionProducto = e => {
         // console.log([e.target.name]);
         // console.log(e.target);
-        
        guardarProducto({
-         ...producto,
+            // Obtener una copia del state y agregar el nuevo
+            ...producto,
             [e.target.name] : e.target.value
             
        })
+        // console.log(producto);
     }
 
     // Colaca la imagen en el state
     const leerArchivo = e => {
         
-        console.log(e);
-        // guardarArchivo( e.target.files);
+        // console.log(e.target.files);
+        guardarArchivo( e.target.files[0]);
     }
 
 
@@ -46,9 +47,9 @@ function NuevoProducto () {
                 <div className="campo">
                     <label>Nombre:</label>
                     <input type="text" 
-                        placeholder="Nombre Producto" 
-                        name="nombre" 
-                        onChange={leerInformacionProducto}
+                           placeholder="Nombre Producto" 
+                           name="nombre" 
+                           onChange={leerInformacionProducto}
                     />
                 </div>
 
@@ -57,16 +58,17 @@ function NuevoProducto () {
                     <input type="number" 
                            name="precio"  
                            min="0.00" 
-                           step="0.01" 
+                           step="0.10" 
                            placeholder="Precio" 
-                           onChange={leerArchivo}
+                           onChange={leerInformacionProducto}
                     />
                 </div>
             
                 <div className="campo">
                     <label>Imagen:</label>
                     <input type="file"  
-                           name="imagen" 
+                           name="imagen"
+                           onChange={leerArchivo}
                     />
                 </div>
 
