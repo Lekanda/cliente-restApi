@@ -26,13 +26,56 @@ function EditarProducto (props) {
     useEffect(() => {
         // Consultar la API para traer el producto a editar
         const consultarAPI = async () => {
-            const productoConsulta = await clienteAxios.get(`/productos/${id}`);
+            const productoConsulta = await clienteAxios.put(`/productos/${id}`);
             // console.log(productoConsulta.data);
             guardarProducto(productoConsulta.data);
         }
 
         consultarAPI();
     }, [])
+
+    // edita uun producto en la db
+    const editarProducto = async e => {
+        e.preventDefault();
+
+        // Crear un formData para subir los datos
+        const formData = new FormData();
+        formData.append('nombre', producto.nombre);
+        formData.append('precio', producto.precio);
+        formData.append('imagen', archivo);
+
+        //Almacenarlo en la DB
+        try {
+            const res = await clienteAxios.put(`/productos/${id}`, formData, {
+                headers: {
+                    'Content-Type' : 'multipart/form-data'
+                }
+            });
+            // console.log(res);
+
+            // Alerta para producto creado
+            if(res.status === 200) {
+                Swal.fire(
+                    'Editado Correctamente',
+                    res.data.mensaje,
+                    'success'
+                )
+            }
+
+            // Redireccionar
+            props.history.push('/productos');
+
+        } catch (error) {
+            console.log(error);
+            // Lanza la alerta
+            Swal.fire({
+                type:'error',
+                title:'Hubo un error',
+                text:'Vuelva a intentarlo'
+            })
+        }
+
+    }
 
      // Leer los datos del formulario
      const leerInformacionProducto = e => {
@@ -62,7 +105,9 @@ function EditarProducto (props) {
         <Fragment>
             <h2>Editar Producto</h2>
 
-            <form>
+            <form
+                onSubmit={editarProducto}
+            >
                 <legend>Comprueba todos los campos</legend>
 
                 <div className="campo">
