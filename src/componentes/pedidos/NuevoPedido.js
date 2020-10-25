@@ -67,6 +67,16 @@ function NuevoPedido(props) {
         guardarBusqueda(e.target.value);
     }
 
+    // Actualizar la cantidad de productos
+    const restarProductos = i => {
+        console.log('uno menos ...', i);
+        // console.log(productos);
+    }
+    const aumentarProductos = i => {
+        console.log('uno mas ...', i);
+        // console.log(productos);
+    }
+
     return (
         <Fragment>
             <h2>Nuevo Pedido</h2>
@@ -87,12 +97,19 @@ function NuevoPedido(props) {
                         <FormCantidadProducto 
                             key={producto.producto}
                             producto={producto}
+                            restarProductos={restarProductos}
+                            aumentarProductos={aumentarProductos}
+                            index={index}
                         />
                     ))}
                 </ul>
                     <div className="campo">
                         <label>Total:</label>
-                        <input type="number" name="precio" placeholder="Precio" readonly="readonly" />
+                        <input 
+                            type="number" 
+                            name="precio" 
+                            placeholder="Precio" readOnly="readonly"
+                        />
                     </div>
                     <div className="enviar">
                         <input type="submit" className="btn btn-azul" value="Agregar Pedido"/>

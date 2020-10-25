@@ -6,7 +6,7 @@ function FormBuscarProducto(props) {
             onSubmit = {props.buscarProducto}
         >
             <legend>Busca un Producto y agrega ucantidad</legend>
-            <div class="campo">
+            <div className="campo">
                 <label>Productos:</label>
                 <input 
                     type="text" 
