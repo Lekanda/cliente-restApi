@@ -16,7 +16,10 @@ function EditarProducto (props) {
         nombre:'',
         precio:'',
         imagen:''
-    })
+    });
+
+    // archivo(imagen)=state, guardarArchivo= setState
+    const [archivo, guardarArchivo] = useState('');
 
     
     //Cuando el componente carga
@@ -24,15 +27,85 @@ function EditarProducto (props) {
         // Consultar la API para traer el producto a editar
         const consultarAPI = async () => {
             const productoConsulta = await clienteAxios.get(`/productos/${id}`);
-            console.log(productoConsulta.data);
+            // console.log(productoConsulta.data);
             guardarProducto(productoConsulta.data);
         }
 
         consultarAPI();
     }, [])
 
+     // Leer los datos del formulario
+     const leerInformacionProducto = e => {
+        // console.log([e.target.name]);
+        // console.log(e.target);
+       guardarProducto({
+            // Obtener una copia del state y agregar el nuevo
+            ...producto,
+            [e.target.name] : e.target.value
+            
+       })
+       // console.log(producto);
+    }
+
+    // Colaca la imagen en el state
+    const leerArchivo = e => {
+        // console.log(e.target.files);
+        guardarArchivo( e.target.files[0]);
+    }
+
+    // extraer los valores del State
+    const { nombre, precio, imagen } = producto;
+
+    if(!nombre) return <Spinner />
+
     return (
-        <h2>Editar Producto</h2>
+        <Fragment>
+            <h2>Editar Producto</h2>
+
+            <form>
+                <legend>Comprueba todos los campos</legend>
+
+                <div className="campo">
+                    <label>Nombre:</label>
+                    <input type="text" 
+                           placeholder="Nombre Producto" 
+                           name="nombre" 
+                           onChange={leerInformacionProducto}
+                           defaultValue={nombre}
+                    />
+                </div>
+
+                <div className="campo">
+                    <label>Precio:</label>
+                    <input type="number" 
+                           name="precio"  
+                           min="0.00" 
+                           step="0.10" 
+                           placeholder="Precio" 
+                           onChange={leerInformacionProducto}
+                           defaultValue={precio}
+                    />
+                </div>
+            
+                <div className="campo">
+                    <label>Imagen:</label>
+                    { imagen ? (
+                        <img src={`http://localhost:2000/${imagen} `} alt="imagen" width="300" />
+                    ) : null }
+                    <input type="file"  
+                           name="imagen"
+                           onChange={leerArchivo}
+                    />
+                </div>
+
+                <div className="enviar">
+                    <input type="submit" 
+                            className="btn btn-azul" 
+                            value="Editar Producto" 
+                    />
+                </div>
+            </form>
+        </Fragment>
     )
 }
 
