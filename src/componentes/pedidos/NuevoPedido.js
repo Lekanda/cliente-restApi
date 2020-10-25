@@ -1,19 +1,19 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import clienteAxios from '../../config/axios';
 import FormBuscarProducto from './FormBuscarProducto';
+import FormCantidadProducto from './FormCantidadProducto';
 import Swal from 'sweetalert2';
 
 
 
 function NuevoPedido(props) {
     // Extraer el ID de cliente
-    const { id } = props.match.params;
+    const {id} = props.match.params;
 
     // State
     const [cliente, guardarCliente] = useState({});
     const [busqueda, guardarBusqueda] = useState('');
-
-
+    const [productos, guardarProductos] = useState([]);
 
 
     useEffect( () => {
@@ -40,6 +40,16 @@ function NuevoPedido(props) {
 
         // Sí no hay resultado en la busqueda una alerta, si no, agregarlo al State
         if(resultadoBusqueda.data[0]) {
+            // console.log(resultadoBusqueda.data[0]);
+            let productoResultado = resultadoBusqueda.data[0];
+            // Agregar la llave "Producto" ( Copia de id)
+            productoResultado.producto = resultadoBusqueda.data[0]._id;
+            productoResultado.cantidad = 0;
+
+            // console.log(productoResultado);
+
+            // Ponerlo en el State
+            guardarProductos([...productos, productoResultado])
 
         }else {
             // No hay resultados
@@ -50,7 +60,7 @@ function NuevoPedido(props) {
             })
         }
 
-        console.log(resultadoBusqueda);
+        // console.log(resultadoBusqueda);
     }
     // Almacena una busqueda en el State
     const leerDatosBusqueda = e => {
@@ -73,23 +83,9 @@ function NuevoPedido(props) {
                 />
 
                 <ul className="resumen">
-                    <li>
-                        <div className="texto-producto">
-                            <p className="nombre">Macbook Pro</p>
-                            <p className="precio">$250</p>
-                        </div>
-                        <div className="acciones">
-                            <div className="contenedor-cantidad">
-                                <i className="fas fa-minus"></i>
-                                <input type="text"name="cantidad" />
-                                <i className="fas fa-plus"></i>
-                            </div>
-                            <button type="button" className="btnbtn-rojo">
-                                <i className="fasfa-minus-circle"></i>
-                                    Eliminar Producto
-                            </button>
-                        </div>
-                    </li>
+                    {productos.map((producto,index) => (
+                        <FormCantidadProducto />
+                    ))}
                 </ul>
                     <div className="campo">
                         <label>Total:</label>
