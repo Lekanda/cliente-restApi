@@ -10,15 +10,15 @@ import Navegacion from './componentes/layout/Navegacion';
 // Componentes
 import Clientes from './componentes/clientes/Clientes';
 import NuevoCliente from './componentes/clientes/NuevoCliente';
-import Pedidos from './componentes/pedidos/Pedidos';
+import EditarCliente from './componentes/clientes/EditarCliente';
 
 import Productos from './componentes/productos/Productos';
-// import Producto from './componentes/productos/Producto';
-import EditarProducto from './componentes/productos/EditarProducto';
 import NuevoProducto from './componentes/productos/NuevoProducto';
+import EditarProducto from './componentes/productos/EditarProducto';
 
+import Pedidos from './componentes/pedidos/Pedidos';
+import NuevoPedido from './componentes/pedidos/NuevoPedido';
 
-import EditarCliente from './componentes/clientes/EditarCliente';
 
 
 function App() {
@@ -39,6 +39,7 @@ function App() {
                     <Route exact path="/productos/editar/:id" component={EditarProducto} />
 
                     <Route exact path="/pedidos" component={Pedidos} />
+                    <Route exact path="/pedidos/nuevo/:id" component={NuevoPedido} />
                   </Switch>
               </main>
           </div>
