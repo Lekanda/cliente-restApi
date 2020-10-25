@@ -14,6 +14,7 @@ function NuevoPedido(props) {
     const [cliente, guardarCliente] = useState({});
     const [busqueda, guardarBusqueda] = useState('');
     const [productos, guardarProductos] = useState([]);
+    const [total, guardarTotal] = useState(0);
 
 
     useEffect( () => {
@@ -28,8 +29,9 @@ function NuevoPedido(props) {
         // Llamar a la API
         consultarAPI();
 
-
-    }, []);
+        // Actualizar el total a pagar
+        actualizarTotal();
+    }, [productos]);
 
 
     const buscarProducto = async e => {
@@ -80,7 +82,6 @@ function NuevoPedido(props) {
         todosProductos[i].cantidad--;
         // Almacenar en el State
         guardarProductos(todosProductos);
-
     }
     const aumentarProductos = i => {
         // console.log('uno mas ...', i);
@@ -92,8 +93,22 @@ function NuevoPedido(props) {
         todosProductos[i].cantidad++;
         // Almacenar en el State
         guardarProductos(todosProductos);
+    }
 
+    // Actualizar el total a pagar
+    const actualizarTotal = () => {
+        // Sí el arreglo de producto es igual a 0: El total es 0
+        if(productos.length === 0) {
+            guardarTotal(0);
+            return;
+        }
 
+        // Calcular el nuevo total
+        let nuevoTotal=0;
+        // Recorrer todos los productos , sus cantidades y precios
+        productos.map(producto => nuevoTotal += (producto.cantidad * producto.precio) );
+        // Almacenar el total
+        guardarTotal(nuevoTotal);
     }
 
     return (
@@ -122,17 +137,17 @@ function NuevoPedido(props) {
                         />
                     ))}
                 </ul>
-                    <div className="campo">
-                        <label>Total:</label>
-                        <input 
-                            type="number" 
-                            name="precio" 
-                            placeholder="Precio" readOnly="readonly"
-                        />
-                    </div>
-                    <div className="enviar">
-                        <input type="submit" className="btn btn-azul" value="Agregar Pedido"/>
-                    </div>
+                    
+                    <p className="total">Total a pagar: <span>${total}</span></p>
+                        
+                    { total > 0 ? (
+                        <form>
+                            <input type = "submit"
+                                   className= "btn btn-verde btn-block"
+                                   value= "Realizar pedido" />
+
+                        </form>
+                    ) : null}
                 
         </Fragment>
     )
