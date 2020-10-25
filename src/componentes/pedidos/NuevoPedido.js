@@ -1,5 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import clienteAxios from '../../config/axios';
+import FormBuscarProducto from './FormBuscarProducto';
+
 
 
 function NuevoPedido(props) {
@@ -27,6 +29,14 @@ function NuevoPedido(props) {
     }, []);
 
 
+    const buscarProducto = () => {
+
+    }
+
+    const leerDatosBusqueda = () => {
+
+    }
+
     return (
         <Fragment>
             <h2>Nuevo Pedido</h2>
@@ -37,68 +47,30 @@ function NuevoPedido(props) {
                     <p>Tlf: {cliente.telefono}</p>
                 </div>
 
+                <FormBuscarProducto 
+                    buscarProducto={buscarProducto}
+                    leerDatosBusqueda={leerDatosBusqueda}
+                />
 
-                <form>
-                    <legend>Busca un Producto y agrega una cantidad</legend>
-
-                    <div class="campo">
-                        <label>Productos:</label>
-                        <input type="text" placeholder="Nombre Productos" name="productos" />
-                    </div>
-
-                    <ul class="resumen">
-                        <li>
-                            <div class="texto-producto">
-                                <p class="nombre">Macbook Pro</p>
-                                <p class="precio">$250</p>
+                <ul class="resumen">
+                    <li>
+                        <div class="texto-producto">
+                            <p class="nombre">Macbook Pro</p>
+                            <p class="precio">$250</p>
+                        </div>
+                        <div class="acciones">
+                            <div class="contenedor-cantidad">
+                                <i class="fas fa-minus"></i>
+                                <input type="text"name="cantidad" />
+                                <i class="fas fa-plus"></i>
                             </div>
-                            <div class="acciones">
-                                <div class="contenedor-cantidad">
-                                    <i class="fas fa-minus"></i>
-                                    <input type="text" name="cantidad" />
-                                    <i class="fas fa-plus"></i>
-                                </div>
-                                <button type="button" class="btn btn-rojo">
-                                    <i class="fas fa-minus-circle"></i>
-                                        Eliminar Producto
-                                </button>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="texto-producto">
-                                <p class="nombre">Macbook Pro</p>
-                                <p class="precio">$250</p>
-                            </div>
-                            <div class="acciones">
-                                <div class="contenedor-cantidad">
-                                    <i class="fas fa-minus"></i>
-                                    <input type="text" name="cantidad" />
-                                    <i class="fas fa-plus"></i>
-                                </div>
-                                <button type="button" class="btn btn-rojo">
-                                    <i class="fas fa-minus-circle"></i>
-                                        Eliminar Producto
-                                </button>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="texto-producto">
-                                <p class="nombre">Macbook Pro</p>
-                                <p class="precio">$250</p>
-                            </div>
-                            <div class="acciones">
-                                <div class="contenedor-cantidad">
-                                    <i class="fas fa-minus"></i>
-                                    <input type="text" name="cantidad" />
-                                    <i class="fas fa-plus"></i>
-                                </div>
-                                <button type="button" class="btn btn-rojo">
-                                    <i class="fas fa-minus-circle"></i>
-                                        Eliminar Producto
-                                </button>
-                            </div>
-                        </li>
-                    </ul>
+                            <button type="button" class="btnbtn-rojo">
+                                <i class="fasfa-minus-circle"></i>
+                                    Eliminar Producto
+                            </button>
+                        </div>
+                    </li>
+                </ul>
                     <div class="campo">
                         <label>Total:</label>
                         <input type="number" name="precio" placeholder="Precio" readonly="readonly" />
@@ -106,7 +78,7 @@ function NuevoPedido(props) {
                     <div class="enviar">
                         <input type="submit" class="btn btn-azul" value="Agregar Pedido"/>
                     </div>
-                </form>
+                
         </Fragment>
     )
 }
