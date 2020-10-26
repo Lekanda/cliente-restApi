@@ -1,8 +1,10 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import clienteAxios from '../../config/axios';
+
 import FormBuscarProducto from './FormBuscarProducto';
 import FormCantidadProducto from './FormCantidadProducto';
 import Swal from 'sweetalert2';
+import { withRouter } from 'react-router-dom'
 
 
 
@@ -122,6 +124,46 @@ function NuevoPedido(props) {
         guardarTotal(nuevoTotal);
     }
 
+    // Almacena el pedido en la DB
+    const realizarPedido = async e => {
+        e.preventDefault();
+
+        // Extraer el id
+        const { id } = props.match.params;
+
+        // Construir el objeto para el pedido
+        const pedido =  {
+            "cliente":id,
+	        "pedido": productos,
+	        "total": total
+        }
+        // console.log(pedido);
+
+        // Almacenar en la DB el Pedido
+        const resultado = await clienteAxios.post(`/pedidos/nuevo/${id}`, pedido);
+        console.log(resultado);
+
+        // Leer el resultado
+        if(resultado.status === 200) {
+            // Alerta de todo salio bien
+            Swal.fire({
+                type: 'success',
+                title: 'Correcto',
+                text: resultado.data.mensaje
+            })
+        } else {
+            // Alerta de Error
+            Swal.fire({
+                type: 'error',
+                title: 'Error al guardar el pedido',
+                text:'Intentalo de nuevo'
+            })
+        }
+        // redireccionar
+        props.history.push('/pedidos');
+
+    }
+
     return (
         <Fragment>
             <h2>Nuevo Pedido</h2>
@@ -153,7 +195,9 @@ function NuevoPedido(props) {
                     <p className="total">Total a pagar: <span>${total}</span></p>
                         
                     { total > 0 ? (
-                        <form>
+                        <form
+                            onSubmit={realizarPedido}
+                        >
                             <input type = "submit"
                                    className= "btn btn-verde btn-block"
                                    value= "Realizar pedido" />
@@ -165,4 +209,4 @@ function NuevoPedido(props) {
     )
 }
 
-export default NuevoPedido;
+export default withRouter(NuevoPedido);
