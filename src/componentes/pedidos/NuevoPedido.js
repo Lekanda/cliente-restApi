@@ -22,7 +22,7 @@ function NuevoPedido(props) {
         const consultarAPI = async () => {
             // Consultar el cliente actual
             const resultado = await clienteAxios.get(`/clientes/${id}`);
-            console.log(resultado.data);
+            // console.log(resultado.data);
             guardarCliente(resultado.data);
         }
 
@@ -95,6 +95,17 @@ function NuevoPedido(props) {
         guardarProductos(todosProductos);
     }
 
+    // Elimina un producto del state****
+    const eliminarProductoPedido = id => {
+        // console.log(id);
+
+
+        // !== guarda los demas que no coinciden;  === guarda el que coincide
+        const todosProductos = productos.filter(producto => producto.producto !== id);
+
+        guardarProductos(todosProductos);
+    }
+
     // Actualizar el total a pagar
     const actualizarTotal = () => {
         // Sí el arreglo de producto es igual a 0: El total es 0
@@ -133,6 +144,7 @@ function NuevoPedido(props) {
                             producto={producto}
                             restarProductos={restarProductos}
                             aumentarProductos={aumentarProductos}
+                            eliminarProductoPedido={eliminarProductoPedido}
                             index={index}
                         />
                     ))}
