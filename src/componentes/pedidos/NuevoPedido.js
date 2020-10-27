@@ -24,7 +24,7 @@ function NuevoPedido(props) {
         const consultarAPI = async () => {
             // Consultar el cliente actual
             const resultado = await clienteAxios.get(`/clientes/${id}`);
-            // console.log(resultado.data);
+            console.log(resultado.data);
             guardarCliente(resultado.data);
         }
 
@@ -104,6 +104,7 @@ function NuevoPedido(props) {
 
         // !== guarda los demas que no coinciden;  === guarda el que coincide
         const todosProductos = productos.filter(producto => producto.producto !== id);
+        console.log(todosProductos);
 
         guardarProductos(todosProductos);
     }

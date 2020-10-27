@@ -1,33 +1,32 @@
 import React from 'react';
 
-function DetallesPedido(props) {
+function DetallesPedido({pedido, i}) {
+
+    // console.log(pedido);
+    
+    const {cliente} = pedido;
+    console.log(pedido.pedido);
+    
     return(
         <li className="pedido">
             <div className="info-pedido">
-                <p className="id">ID: 0192019201291201</p>
-                <p className="nombre">Cliente: Juan Pablo De la torre</p>
+                <p className="id">ID: {cliente._id}</p>
+                <p className="nombre">Cliente: {cliente.nombre} {cliente.apellido}</p>
 
-                    <div className="articulos-pedido">
-                        <p className="productos">Artículos Pedido: </p>
-                        <ul>
-                            <li>
-                                <p>Macbook Pro</p>
-                                <p>Precio: $3000</p>
-                                <p>Cantidad: 4</p>
+                <div className="articulos-pedido">
+                    <p className="productos">Artículos Pedidos: </p>
+                    <ul>
+                        {pedido.pedido.map(articulos => (
+                            <li key={pedido._id+articulos.producto._id}>
+                                <p>{articulos.producto.nombre}</p>
+                                <p>{articulos.producto.precio}</p>
+                                <p>Cantidad: {articulos.cantidad}</p>
                             </li>
-                            <li>
-                                <p>Macbook Pro</p>
-                                <p>Precio: $3000</p>
-                                <p>Cantidad: 4</p>
-                            </li>
-                            <li>
-                                <p>Macbook Pro</p>
-                                <p>Precio: $3000</p>
-                                <p>Cantidad: 4</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <p className="total">Total: $3,500 </p>
+                        ))}
+                            
+                    </ul>
+                </div>
+                    <p className="total">Total: ${pedido.total} </p>
             </div>
             <div className="acciones">
                 <button type="button" className="btn btn-rojo btn-eliminar">

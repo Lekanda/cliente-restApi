@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import clienteAxios from '../../config/axios';
 
 
+
 function Cliente({cliente}) {
     // console.log(cliente .nombre);
 

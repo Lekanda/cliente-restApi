@@ -9,7 +9,7 @@ function EditarCliente(props) {
     // Obtener el ID
     const { id } = props.match.params;
 
-    // console.log(id);
+    console.log(id);
 
     // Cliente = State
     //guardarCliente = funcion para guardar el State
@@ -25,7 +25,7 @@ function EditarCliente(props) {
     // Query a la API
     const consultarAPI = async () => {
         const clienteconsulta = await clienteAxios.get(`/clientes/${id}`);
-        // console.log(clienteconsulta.data);
+        console.log(clienteconsulta.data);
         
         // Colocar en el State
         datosCliente(clienteconsulta.data)
