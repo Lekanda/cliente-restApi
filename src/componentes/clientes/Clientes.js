@@ -19,7 +19,7 @@ function Clientes () {
     const consultarAPI = async() => {
         // console.log('Consultando...');
         const clientesConsulta = await clienteAxios.get('/clientes');
-        console.log(clientesConsulta.data.clientes);
+        // console.log(clientesConsulta.data.clientes);
 
         // Colocar el resultado en el State
         guardarClientes(clientesConsulta.data.clientes);

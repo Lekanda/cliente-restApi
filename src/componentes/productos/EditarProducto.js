@@ -32,6 +32,7 @@ function EditarProducto (props) {
         }
 
         consultarAPI();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // edita uun producto en la db

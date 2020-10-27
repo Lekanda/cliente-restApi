@@ -6,11 +6,19 @@ const eliminarProducto = id => {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',            cancelButtonColor: '#d33',
         confirmButtonText: 'Si, elimínalo!'})
-        .then((result) => {if (result.value) {
+        .then((result) => {
+            if (result.value) 
+            {
             // llamado a axios
             clienteAxios.delete(`/productos/${id}`)
             .then(res => {
-                Swal.fire(                    'Eliminado!',                    'El cliente se ha eliminado.',                    'success'                    )                })            }          })    }
+                Swal.fire(                    'Eliminado!',                    'El cliente se ha eliminado.',                    'success'                    
+                )                
+            })            
+        }          
+            
+    })    
+        }
 
 
 

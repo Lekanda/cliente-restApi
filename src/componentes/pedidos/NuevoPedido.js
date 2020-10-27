@@ -33,6 +33,7 @@ function NuevoPedido(props) {
 
         // Actualizar el total a pagar
         actualizarTotal();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [productos]);
 
 

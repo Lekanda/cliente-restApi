@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
-import Cliente from './Cliente';
+// import Cliente from './Cliente';
 
 
 function EditarCliente(props) {
@@ -34,6 +34,7 @@ function EditarCliente(props) {
     //useEffect , cuando el componente carga
     useEffect( () => {
         consultarAPI();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
