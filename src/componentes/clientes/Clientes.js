@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment, useContext } from 'react';
 // Importar cliente Axios
 import clienteAxios from '../../config/axios';
 
@@ -7,6 +7,8 @@ import  Cliente from './Cliente';
 import { Link } from 'react-router-dom';
 import Spinner from '../layout/Spinner';
 
+import { CRMContext } from '../../context/CRMContext';
+
 
 function Clientes () {
     // Trabajar con el State
@@ -14,11 +16,20 @@ function Clientes () {
     // guardarClientes = Funcion para guardar el State
     const [clientes, guardarClientes] = useState([]);
 
+    // Usar valores del context
+    const [auth, guardarAuth] = useContext(CRMContext);
+
+    console.log(auth);
+
 
     //Query a la API
     const consultarAPI = async() => {
         // console.log('Consultando...');
-        const clientesConsulta = await clienteAxios.get('/clientes');
+        const clientesConsulta = await clienteAxios.get('/clientes', {
+            headers : {
+                Autherization : `Bearer LLAVESECRETA`
+            }
+        });
         // console.log(clientesConsulta.data.clientes);
 
         // Colocar el resultado en el State
