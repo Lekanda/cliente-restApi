@@ -24,7 +24,7 @@ function NuevoPedido(props) {
         const consultarAPI = async () => {
             // Consultar el cliente actual
             const resultado = await clienteAxios.get(`/clientes/${id}`);
-            console.log(resultado.data);
+            // console.log(resultado.data);
             guardarCliente(resultado.data);
         }
 
@@ -105,7 +105,7 @@ function NuevoPedido(props) {
 
         // !== guarda los demas que no coinciden;  === guarda el que coincide
         const todosProductos = productos.filter(producto => producto.producto !== id);
-        console.log(todosProductos);
+        // console.log(todosProductos);
 
         guardarProductos(todosProductos);
     }
@@ -143,7 +143,7 @@ function NuevoPedido(props) {
 
         // Almacenar en la DB el Pedido
         const resultado = await clienteAxios.post(`/pedidos/nuevo/${id}`, pedido);
-        console.log(resultado);
+        // console.log(resultado);
 
         // Leer el resultado
         if(resultado.status === 200) {

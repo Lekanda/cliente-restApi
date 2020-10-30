@@ -26,7 +26,7 @@ function NuevoCliente({history}) {
             ...cliente,
             [e.target.name] : e.target.value
         })
-        console.log(cliente);
+        // console.log(cliente);
         // console.log([e.target.name] + ":" + e.target.value);
     }
 
@@ -41,7 +41,7 @@ function NuevoCliente({history}) {
                 // console.log(res);
                 // Validar sí hay errores de Mongo
                 if(res.data.code === 11000) {
-                    console.log('Error de duplicado de Mongo');
+                    // console.log('Error de duplicado de Mongo');
                     Swal.fire({
                         
                         title: 'Hubo un Error!',

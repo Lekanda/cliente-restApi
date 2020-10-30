@@ -4,43 +4,59 @@ import clienteAxios from '../../config/axios';
 
 import  Cliente from './Cliente';
 
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Spinner from '../layout/Spinner';
 
 import { CRMContext } from '../../context/CRMContext';
 
 
-function Clientes () {
+function Clientes (props) {
     // Trabajar con el State
     // clientes = State
     // guardarClientes = Funcion para guardar el State
     const [clientes, guardarClientes] = useState([]);
 
     // Usar valores del context
+    // eslint-disable-next-line
     const [auth, guardarAuth] = useContext(CRMContext);
+    // console.log(guardarAuth);
 
-    console.log(auth);
-
-
-    //Query a la API
-    const consultarAPI = async() => {
-        // console.log('Consultando...');
-        const clientesConsulta = await clienteAxios.get('/clientes', {
-            headers : {
-                Autherization : `Bearer LLAVESECRETA`
-            }
-        });
-        // console.log(clientesConsulta.data.clientes);
-
-        // Colocar el resultado en el State
-        guardarClientes(clientesConsulta.data.clientes);
-    }
 
     //  Use effect es similar a componentdidmount y willmount
     // Cuando carga ejecuta consultarAPI()
     useEffect( () => {
-        consultarAPI();
+        if(auth.token !== '') {
+            //Query a la API
+            const consultarAPI = async() => {
+                try {
+
+                    const clientesConsulta = await clienteAxios.get('/clientes', {
+                        headers : {
+                            Authorization : `Bearer ${auth.token}`
+                        }
+                    });
+                    // Colocar el resultado en el State
+                    guardarClientes(clientesConsulta.data.clientes);
+
+                } catch (error) {
+                    // console.log(error);
+                    // Error con autorizacion
+                    if(error.response.status === 500) {
+                        props.history.push('/iniciar-sesion');
+                    }
+                }
+                }
+                consultarAPI();
+        }else {
+            props.history.push('/iniciar-sesion');
+        }
+    // eslint-disable-next-line
     }, [clientes] );
+
+    /// Si el State esta como false
+    if(!auth.auth) {
+        props.history.push('/iniciar-sesion');
+    }
 
 
     function createArray(clientes) {
@@ -76,4 +92,4 @@ function Clientes () {
     )
 }
 
-export default Clientes;
+export default withRouter (Clientes);

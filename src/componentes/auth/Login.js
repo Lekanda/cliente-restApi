@@ -10,9 +10,10 @@ import { CRMContext } from '../../context/CRMContext';
 function Login (props) {
 
     // Auth y token
+    // eslint-disable-next-line
     const [auth, guardarAuth] = useContext(CRMContext);
-    console.log(auth);
-    console.log(guardarAuth);
+    // console.log(auth);
+    // console.log(guardarAuth);
 
     // State con los datos del formuulario
     const [credenciales, guardarCredenciales] = useState({});
@@ -48,7 +49,7 @@ function Login (props) {
             
 
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             Swal.fire({
                 type:'error',
                 title: 'Hubo un error',
