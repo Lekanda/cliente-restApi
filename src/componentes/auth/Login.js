@@ -1,17 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Swal from 'sweetalert2';
+import clienteAxios from '../../config/axios';
+import { withRouter } from 'react-router-dom';
 
 
-function Login () {
+function Login (props) {
 
-    const leerDatos = () => {
-        
+    // State con los datos del formuulario
+    const [credenciales, guardarCredenciales] = useState({});
+
+    // Iniciar Sesion en el Servidor
+    const iniciarSesion = async e => {
+        e.preventDefault();
+
+        //Autenticar aL usuario
+        try {
+            const respuesta = await clienteAxios.post('/iniciar-sesion', credenciales);
+            // console.log(respuesta);
+
+            // Extraer el Token y colocarlo en localstorage
+            const { token } = respuesta.data;
+            localStorage.setItem('token', token);
+
+            // Lanzar una alerta
+            Swal.fire(
+                'Login Correcto',
+                'Has iniciado sesion',
+                'success'
+            )
+
+            // Redireccionar
+            props.history.push('/')
+            
+
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                type:'error',
+                title: 'Hubo un error',
+                text: error.response.data.mensaje
+            })
+        }
     }
 
+    // Almacenar lo que usuario escribe en el State
+    const leerDatos = e => {
+        guardarCredenciales({
+            ...credenciales,
+            [e.target.name] : e.target.value
+        })
+    }
 
+    
     return(
         
         <div className="login">
-            <h2>Iniciar Sesion</h2>
+            <h2>Iniciar Sesion </h2>
 
             <div className="contenedor-formulario">
                 <form>
@@ -29,7 +73,9 @@ function Login () {
             </div>
 
             <div className="contenedor-formulario">
-                <form>
+                <form
+                    onSubmit={iniciarSesion}
+                >
                     <div className="campo">
                         <label>Password</label>
                         <input 
@@ -40,12 +86,13 @@ function Login () {
                             onChange={leerDatos}
                         />
                     </div>
+
+                    <input type="submit" value="Iniciar Sesion" className="btn btn-verde btn-block" />
                 </form>
             </div>
-
-            <input type="submit" value="Iniciar Sesion" className="btn btn-verde btn-block" />
         </div>
     )
 }
 
-export default Login;
+
+export default withRouter(Login);
