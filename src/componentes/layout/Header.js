@@ -1,12 +1,47 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { withRouter } from 'react-router-dom';
 
-const Header = () => (
-    <header className="barra">
-        <div className="contenedor">
-            <h1>CRM - Administrador de Clientes</h1>
-        </div>
-    </header>
-)
+import { CRMContext } from '../../context/CRMContext';
+
+const Header = (props) => {
+
+    const [auth, guardarAuth] = useContext(CRMContext);
+
+    const cerrarSesion = () => {
+        //auth.auth = false y el token se remueve
+        guardarAuth({
+            token: '',
+            auth: false
+        });
+
+        // Eliminar de LocalStorage
+        localStorage.setItem('token', '');
+        // Redireccionar
+        props.history.push('/iniciar-sesion');
+
+    }
+
+    return(
+        <header className="barra">
+            <div className="contenedor">
+                <div className="contenido-barra">
+                    <h1>CRM - Administrador de Clientes</h1>
+
+                    {auth.auth ? (
+                        <button 
+                        type="button"
+                        className="btn btn-rojo"
+                        onClick={cerrarSesion}
+                        >
+                            <i className="far fa-times-circle"></i>
+                                Cerrar Sesion
+                        </button>
+                    ) : null }
+                </div>
+            </div>
+        </header>
+    )
+}
 
 
-export default Header;
+export default withRouter(Header);
