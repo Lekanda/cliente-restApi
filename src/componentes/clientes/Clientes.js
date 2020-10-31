@@ -19,7 +19,6 @@ function Clientes (props) {
     // Usar valores del context
     // eslint-disable-next-line
     const [auth, guardarAuth] = useContext(CRMContext);
-    // console.log(guardarAuth);
 
 
     //  Use effect es similar a componentdidmount y willmount
@@ -53,7 +52,7 @@ function Clientes (props) {
     // eslint-disable-next-line
     }, [clientes] );
 
-    /// Si el State esta como false
+    // Si el State esta como false
     if(!auth.auth) {
         props.history.push('/iniciar-sesion');
     }

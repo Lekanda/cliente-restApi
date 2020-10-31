@@ -5,10 +5,11 @@ import { CRMContext } from '../../context/CRMContext';
 
 
 const Navegacion = () => {
-
+    // eslint-disable-next-line
     const [auth, guardarAuth] = useContext(CRMContext);
 
     // Sí no esta logeado no lo ve 
+
     if(!auth.auth) return null;
 
     return ( 

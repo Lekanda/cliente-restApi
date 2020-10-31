@@ -49,7 +49,6 @@ function Login (props) {
             
 
         } catch (error) {
-            // console.log(error);
             Swal.fire({
                 type:'error',
                 title: 'Hubo un error',

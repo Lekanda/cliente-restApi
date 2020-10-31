@@ -1,25 +1,50 @@
-import React, {useEffect, useState, Fragment} from 'react';
+import React, {useEffect, useState, useContext, Fragment} from 'react';
 import {Link} from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import Producto from './Producto';
 import Spinner from '../layout/Spinner';
+import { CRMContext } from '../../context/CRMContext';
 
-function Productos () {
+function Productos (props) {
     // produuctos= state ; guaradrProduuctos= funcion para guardar el State
     const [productos, guardarProductos] = useState([]);
 
+    // Usar valores del context
+    // eslint-disable-next-line
+    const [auth, guardarAuth] = useContext(CRMContext);
+
     // UseEffect para consultar la API cuando cargue
     useEffect( () => {
+      if(auth.token !== '') {
         // Query a la API
         const consultarAPI = async () => {
-            const productosConsulta = await clienteAxios.get('/productos/');
-            // console.log(productosConsulta.data.productos);
-            guardarProductos(productosConsulta.data.productos); 
+            try {
+              const productosConsulta = await clienteAxios.get('/productos' , {
+                headers : {
+                  Authorization : `Bearer ${auth.token}`
+                }
+              });
+              // console.log(productosConsulta.data.productos);
+              guardarProductos(productosConsulta.data.productos); 
+            } catch (error) {
+              // Error con autorizacion
+              if(error.response.status === 500) {
+                props.history.push('/iniciar-sesion');
+            }
+            }
         }
         // llamada API
         consultarAPI();
+      } else {
+        props.history.push('/iniciar-sesion');
+      }    
     }, [productos]);// productos: para que actualice despues de borrar en API
 
+
+    // Si el State esta como false
+    if(!auth.auth) {
+      props.history.push('/iniciar-sesion');
+    }
 
 
     //

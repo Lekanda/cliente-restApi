@@ -1,10 +1,15 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState,useContext } from 'react';
 import clienteAxios from '../../config/axios';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
+import { CRMContext } from '../../context/CRMContext';
 
 
 function NuevoCliente({history}) {
+     // Usar valores del context
+    // eslint-disable-next-line
+    const [auth, guardarAuth] = useContext(CRMContext);
+
     // Cliente = State
     //guaradrCliente = funcion para guardar el State
     const[cliente, guardarCliente]  = useState({
@@ -77,6 +82,14 @@ function NuevoCliente({history}) {
         // Return true o false
         return valido;
     }
+
+    // Verificar si el uusuario esta autenticado o no
+    if(!auth.auth && (localStorage.getItem('token') === auth.token) ) {
+        history.push('/iniciar-sesion');
+    };
+
+
+
     return (
         <Fragment>
             <h2>Nuevo Cliente</h2>
