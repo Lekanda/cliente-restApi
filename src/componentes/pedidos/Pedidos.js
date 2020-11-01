@@ -1,19 +1,41 @@
-import React, { useEffect, useState, Fragment} from 'react';
+import React, { useEffect, useState, useContext, Fragment} from 'react';
 import clienteAxios from '../../config/axios';
 import DetallesPedido from './DetallesPedido';
+import { CRMContext } from '../../context/CRMContext';
 
-function Pedidos () {
+
+function Pedidos (props) {
     const [pedidos, guardarPedidos]= useState([]);
     // console.log(pedidos);
 
-    useEffect(() => {
-        const consultarAPI = async () => {
-            // obtener los pedidos
-            const resultado = await clienteAxios.get('/pedidos');
-            guardarPedidos(resultado.data);
-            // console.log(resultado);
+    // Usar valores del context
+    // eslint-disable-next-line
+    const [auth, guardarAuth] = useContext(CRMContext);
+
+    useEffect( () => {
+        if(auth.token !== '') {
+            const consultarAPI = async () => {
+                try {
+                    // obtener los pedidos
+                    const resultado = await clienteAxios.get('/pedidos', {
+                        headers : {
+                          'Authorization' : `Bearer ${auth.token}`
+                        }
+                    });
+                    guardarPedidos(resultado.data);
+                    // console.log(resultado);
+                } catch (error) {
+                    // Error con autorizacion
+                    if(error.response.status === 500) {
+                    props.history.push('/iniciar-sesion');
+                    }
+                }
+            }
+        consultarAPI()
+        } else {
+            props.history.push('/iniciar-sesion');
         }
-        consultarAPI();
+        // eslint-disable-next-line
     }, []);
 
 
@@ -35,3 +57,9 @@ function Pedidos () {
 }
 
 export default Pedidos;
+
+
+
+
+
+ 

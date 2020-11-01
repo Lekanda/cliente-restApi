@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useContext} from 'react';
+import { CRMContext } from '../../context/CRMContext';
 
 function FormCantidadProducto (props) {
     const {producto, restarProductos, aumentarProductos, eliminarProductoPedido, index } = props;
+
+     // Usar valores del context
+    // eslint-disable-next-line
+    const [auth, guardarAuth] = useContext(CRMContext);
+    if(auth.token === ''){
+        props.history.push('/iniciar-sesion');
+    }
 
     return(
         <li>

@@ -1,10 +1,11 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useContext } from 'react';
 import clienteAxios from '../../config/axios';
 
 import FormBuscarProducto from './FormBuscarProducto';
 import FormCantidadProducto from './FormCantidadProducto';
 import Swal from 'sweetalert2';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import { CRMContext } from '../../context/CRMContext';
 
 
 
@@ -18,18 +19,32 @@ function NuevoPedido(props) {
     const [productos, guardarProductos] = useState([]);
     const [total, guardarTotal] = useState(0);
 
+    // eslint-disable-next-line
+    const [auth, guardarAuth] = useContext(CRMContext);
 
-    useEffect( () => {
-        // Obtener el cliente
-        const consultarAPI = async () => {
-            // Consultar el cliente actual
-            const resultado = await clienteAxios.get(`/clientes/${id}`);
-            // console.log(resultado.data);
-            guardarCliente(resultado.data);
+    useEffect( (props) => {
+        if(auth.token !== '') {
+            // Obtener el cliente
+            const consultarAPI = async () => {
+                try {
+                    // Consultar el cliente actual
+                    const resultado = await clienteAxios.get(`/clientes/${id}`, {
+                        headers : {
+                          Authorization : `Bearer ${auth.token}`
+                        }
+                      });
+                    // console.log(resultado.data);
+                    guardarCliente(resultado.data);
+                } catch (error) {
+                    props.history.push('/iniciar-sesion');
+                }
+            }
+
+            // Llamar a la API
+            consultarAPI();
+        } else {
+            props.history.push('/iniciar-sesion');
         }
-
-        // Llamar a la API
-        consultarAPI();
 
         // Actualizar el total a pagar
         actualizarTotal();
@@ -39,30 +54,36 @@ function NuevoPedido(props) {
 
     const buscarProducto = async e => {
         e.preventDefault();
-
-        // Obtener los productos de la busqueda
-        const resultadoBusqueda = await clienteAxios.post(`/productos/busqueda/${busqueda}`);
+        
+        if(auth.token !== '') {
+            // Obtener los productos de la busqueda
+            const resultadoBusqueda = await clienteAxios.post(`/productos/busqueda/${busqueda}`, {
+            headers : {
+            'Authorization' : `Bearer ${auth.token}`
+            }
+            });
 
         // Sí no hay resultado en la busqueda una alerta, si no, agregarlo al State
-        if(resultadoBusqueda.data[0]) {
-            // console.log(resultadoBusqueda.data[0]);
-            let productoResultado = resultadoBusqueda.data[0];
-            // Agregar la llave "Producto" ( Copia de id)
-            productoResultado.producto = resultadoBusqueda.data[0]._id;
-            productoResultado.cantidad = 0;
+            if(resultadoBusqueda.data[0]) {
+                // console.log(resultadoBusqueda.data[0]);
+                let productoResultado = resultadoBusqueda.data[0];
+                // Agregar la llave "Producto" ( Copia de id)
+                productoResultado.producto = resultadoBusqueda.data[0]._id;
+                productoResultado.cantidad = 0;
 
             // console.log(productoResultado);
 
             // Ponerlo en el State
             guardarProductos([...productos, productoResultado])
 
-        }else {
-            // No hay resultados
-            Swal.fire({
-                type: 'error',
-                title: 'No hay resultados',
-                text:'No hay resultados'
-            })
+            }else {
+                // No hay resultados
+                Swal.fire({
+                    type: 'error',
+                    title: 'No hay resultados',
+                    text:'No hay resultados'
+                })
+            }
         }
 
         // console.log(resultadoBusqueda);
@@ -141,8 +162,16 @@ function NuevoPedido(props) {
         }
         // console.log(pedido);
 
+
+        if(auth.token === '') {
+            props.history.push('/iniciar-sesion');
+        }
         // Almacenar en la DB el Pedido
-        const resultado = await clienteAxios.post(`/pedidos/nuevo/${id}`, pedido);
+        const resultado = await clienteAxios.post(`/pedidos/nuevo/${id}`, pedido, {
+            headers : {
+              Authorization : `Bearer ${auth.token}`
+            }
+          });
         // console.log(resultado);
 
         // Leer el resultado

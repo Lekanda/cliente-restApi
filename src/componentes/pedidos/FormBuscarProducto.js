@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { CRMContext } from '../../context/CRMContext';
 
 function FormBuscarProducto(props) {
+
+
+    // eslint-disable-next-line
+    const [auth, guardarAuth] = useContext(CRMContext);
+
+    if(auth.token === ''){
+        props.history.push('/iniciar-sesion');
+    }
+
+
     return(
         <form
             onSubmit = {props.buscarProducto}
         >
-            <legend>Busca un Producto y agrega ucantidad</legend>
+            <legend>Busca un Producto y agrega una cantidad</legend>
             <div className="campo">
                 <label>Productos:</label>
                 <input 
