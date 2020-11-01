@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import clienteAxios from '../../config/axios';
+import { CRMContext } from '../../context/CRMContext';
 
 
 
@@ -10,6 +11,10 @@ function Cliente({cliente}) {
 
     // Extraer los valores
     const { _id, nombre, apellido, empresa, email, telefono} = cliente;
+
+    // Usar valores del context
+    // eslint-disable-next-line
+    const [auth, guardarAuth] = useContext(CRMContext);
     
     // Eliminar Cliente
     const eliminarCliente = idCliente => {
@@ -24,17 +29,23 @@ function Cliente({cliente}) {
             confirmButtonText: 'Si, borralo!',
             cancelButtonText: 'Cancelar!'
           }).then((result) => {
-            if (result.value) {
-            // LLamar a Axios para eliminar
-                clienteAxios.delete(`/clientes/${idCliente}`)
-                    .then(res => {
-                        // console.log(res);
-                        Swal.fire(
-                            'Eliminado!',
-                            res.data.mensaje,
-                            'success'
-                        );
+            if(auth.token !== '') {
+                if (result.value) {
+                // LLamar a Axios para eliminar
+                    clienteAxios.delete(`/clientes/${idCliente}`, {
+                        headers : {
+                        'Authorization' : `Bearer ${auth.token}`
+                        }
                     })
+                        .then(res => {
+                            console.log(res);
+                            Swal.fire(
+                                'Eliminado!',
+                                res.data.mensaje,
+                                'success'
+                            );
+                        })
+                }
             }
           });
     };
@@ -64,7 +75,7 @@ function Cliente({cliente}) {
                     className="btn btn-rojo btn-eliminar"
                     onClick={() => eliminarCliente(_id)}// El () del _id es para que se ejecute inmediatamente
                     // La arrow function de este ejemplo hace que solo se ejecute al presionar.
-                    // Sin la Arrow function con el parentesis  ejecuta todo lo que hay inmediatamente y da 5 veces la funcion
+                    // Sin la Arrow function esta con el parentesis  ejecuta todo lo que hay inmediatamente y da 5 veces la funcion
                     // sin pasar la variable _id no podemos decirle a la funcion que tiene que borrar
                 >
 

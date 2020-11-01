@@ -1,8 +1,9 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useContext } from 'react';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 // import Cliente from './Cliente';
+import { CRMContext } from '../../context/CRMContext';
 
 
 function EditarCliente(props) {
@@ -21,11 +22,17 @@ function EditarCliente(props) {
         telefono: ''
     });
 
+    const [auth, guardarAuth] = useContext(CRMContext);
+
 
     // Query a la API
     const consultarAPI = async () => {
-        const clienteconsulta = await clienteAxios.get(`/clientes/${id}`);
-        console.log(clienteconsulta.data);
+        const clienteconsulta = await clienteAxios.get(`/clientes/${id}`, {
+            headers: {
+                'Authorization' : `Bearer ${auth.token}`
+            }
+        });
+        // console.log(clienteconsulta.data);
         
         // Colocar en el State
         datosCliente(clienteconsulta.data)
@@ -53,7 +60,11 @@ function EditarCliente(props) {
         e.preventDefault();
 
         // Enviar peticion por Axios
-        clienteAxios.put(`/clientes/${cliente._id}`, cliente)
+        clienteAxios.put(`/clientes/${cliente._id}`, cliente, {
+            headers: {
+                'Authorization' : `Bearer ${auth.token}`
+            }
+        })
             .then(res => {
                 if(res.data.code === 11000) {
                     console.log('Error de duplicado de Mongo');

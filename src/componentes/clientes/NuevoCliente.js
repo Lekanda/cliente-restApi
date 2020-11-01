@@ -6,10 +6,6 @@ import { CRMContext } from '../../context/CRMContext';
 
 
 function NuevoCliente({history}) {
-     // Usar valores del context
-    // eslint-disable-next-line
-    const [auth, guardarAuth] = useContext(CRMContext);
-
     // Cliente = State
     //guaradrCliente = funcion para guardar el State
     const[cliente, guardarCliente]  = useState({
@@ -20,10 +16,16 @@ function NuevoCliente({history}) {
         telefono: ''
     });
 
+    // Usar valores del context
+    // eslint-disable-next-line
+    const [auth, guardarAuth] = useContext(CRMContext);
+
+
+
 
     // Leer los datosdel formulario
     const actualizarState = e => {
-        // console.log('Alguien escribe....');
+        console.log('Alguien escribe....');
         // console.log([e.target.value);
         // Almacenamos lo que el usuario escribe en el State
         guardarCliente({
@@ -32,7 +34,7 @@ function NuevoCliente({history}) {
             [e.target.name] : e.target.value
         })
         // console.log(cliente);
-        // console.log([e.target.name] + ":" + e.target.value);
+        console.log([e.target.name] + ":" + e.target.value);
     }
 
 
@@ -41,7 +43,11 @@ function NuevoCliente({history}) {
         e.preventDefault();
 
         // Enviar peticion a xios
-        clienteAxios.post('/clientes', cliente)
+        clienteAxios.post('/clientes', cliente, {
+            headers : {
+              'Authorization' : `Bearer ${auth.token}`
+            }
+          })
             .then(res => {
                 // console.log(res);
                 // Validar sí hay errores de Mongo
