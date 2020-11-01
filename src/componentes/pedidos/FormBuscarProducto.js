@@ -7,9 +7,7 @@ function FormBuscarProducto(props) {
     // eslint-disable-next-line
     const [auth, guardarAuth] = useContext(CRMContext);
 
-    if(auth.token === ''){
-        props.history.push('/iniciar-sesion');
-    }
+    if(!auth.auth) return null;
 
 
     return(

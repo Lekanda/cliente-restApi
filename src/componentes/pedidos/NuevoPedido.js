@@ -43,7 +43,8 @@ function NuevoPedido(props) {
             // Llamar a la API
             consultarAPI();
         } else {
-            props.history.push('/iniciar-sesion');
+            // props.history.push('/iniciar-sesion');
+            console.log(props);
         }
 
         // Actualizar el total a pagar
