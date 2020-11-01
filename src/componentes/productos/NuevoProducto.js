@@ -1,7 +1,8 @@
-import React, {useState, Fragment} from 'react';
+import React, {useState, Fragment, useContext} from 'react';
 import Swal from 'sweetalert2';
 import clienteAxios from '../../config/axios';
 import { withRouter} from 'react-router-dom';
+import { CRMContext } from '../../context/CRMContext';
 
 
 function NuevoProducto (props) {
@@ -12,7 +13,10 @@ function NuevoProducto (props) {
         precio: ''
     }); 
     // archivo(imagen)=state, guardarArchivo= setState
+    // eslint-disable-next-line
     const [archivo, guardarArchivo] = useState('');
+    // eslint-disable-next-line
+    const [auth, guardarAuth] = useContext(CRMContext);
 
     // Almacena el nuevo Producto en la DB y sube la imagen a la vez
     const agregarProducto = async e => {
@@ -24,36 +28,44 @@ function NuevoProducto (props) {
         formData.append('precio', producto.precio);
         formData.append('imagen', archivo);
 
-        //Almacenarlo en la DB
-        try {
-            const res = await clienteAxios.post('/productos', formData, {
-                headers: {
-                    'Content-Type' : 'multipart/form-data'
-                }
-            });
-            // console.log(res);
 
-            // Alerta para producto creado
-            if(res.status === 200) {
-                Swal.fire(
-                    'Agregado Correctamente',
-                    res.data.mensaje,
-                    'success'
-                )
+        if(auth.token !== '') {
+             //Almacenarlo en la DB
+            try {
+                const res = await clienteAxios.post('/productos', formData, {
+                    headers: {
+                        'Content-Type' : 'multipart/form-data',
+                        'Authorization' : `Bearer ${auth.token}`
+                    }
+                });
+                // console.log(res);
+
+                // Alerta para producto creado
+                if(res.status === 200) {
+                    Swal.fire(
+                        'Agregado Correctamente',
+                        res.data.mensaje,
+                        'success'
+                    )
+                }
+
+                // Redireccionar
+                props.history.push('/productos');
+
+            } catch (error) {
+                console.log(error);
+                // Lanza la alerta
+                Swal.fire({
+                    type:'error',
+                    title:'Hubo un error',
+                    text:'Vuelva a intentarlo'
+                })
+            }
             }
 
-            // Redireccionar
-            props.history.push('/productos');
 
-        } catch (error) {
-            console.log(error);
-            // Lanza la alerta
-            Swal.fire({
-                type:'error',
-                title:'Hubo un error',
-                text:'Vuelva a intentarlo'
-            })
-        }
+
+       
     }
     // Leer los datos del formulario
     const leerInformacionProducto = e => {

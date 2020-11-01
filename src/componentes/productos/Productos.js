@@ -37,7 +37,8 @@ function Productos (props) {
         consultarAPI();
       } else {
         props.history.push('/iniciar-sesion');
-      }    
+      } 
+      // eslint-disable-next-line   
     }, [productos]);// productos: para que actualice despues de borrar en API
 
 
@@ -46,7 +47,7 @@ function Productos (props) {
       props.history.push('/iniciar-sesion');
     }
 
-
+    
     //
     function createArray(productos) {
         if (productos && productos.length > 0) {

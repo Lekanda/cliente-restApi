@@ -1,40 +1,57 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import clienteAxios from '../../config/axios'
+import clienteAxios from '../../config/axios';
+import { CRMContext } from '../../context/CRMContext';
 
 
-function NuevoProducto ({producto}) {
+function NuevoProducto ({producto, props}) {
     // console.log(producto);
+    // eslint-disable-next-line
+    const [auth, guardarAuth] = useContext(CRMContext);
 
-    // Eliminar Producto
+
+    if(auth.token === ''){
+        // Redireccionar
+        props.history.push('/iniciar-sesion');;
+    } 
+        // Eliminar Producto
     const eliminarProducto = id => {
         Swal.fire({
-            title: '¿Estas Seguro?',
-            text: "No se podra recuperar el producto!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, Borralo!',
-            cancelButtonText: 'No lo Borres!'
-          }).then((result) => {
+                title: '¿Estas Seguro?',
+                text: "No se podra recuperar el producto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, Borralo!',
+                cancelButtonText: 'No lo Borres!'
+        }).then((result) => {
             if (result.value) {
                 // Eliminar en la RESTAPI
-                clienteAxios.delete(`/productos/${id}`)
+                clienteAxios.delete(`/productos/${id}`, {
+                    headers: {
+                        'Content-Type' : 'multipart/form-data',
+                        'Authorization' : `Bearer ${auth.token}`
+                    }
+                })
                     .then(res => {
                         if(res.status === 200) {// correcto. Se elimino
-                            Swal.fire(
+                         Swal.fire(
                                 'Borrado!',
                                 res.data.mensaje,
                                 'success'
-                            )
+                        )
                         }
                     })
             }
-          })
+        })
+        
+
     }
 
+
+    
 
     const {_id, nombre, precio, imagen } = producto;
 

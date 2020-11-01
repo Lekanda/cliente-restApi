@@ -1,8 +1,9 @@
-import React, {useState, useEffect, Fragment} from 'react';
+import React, {useState, useEffect, Fragment, useContext} from 'react';
 import Swal from 'sweetalert2';
 import clienteAxios from '../../config/axios';
 import { withRouter} from 'react-router-dom';
 import Spinner from '../layout/Spinner';
+import { CRMContext } from '../../context/CRMContext';
 
 
 
@@ -21,12 +22,20 @@ function EditarProducto (props) {
     // archivo(imagen)=state, guardarArchivo= setState
     const [archivo, guardarArchivo] = useState('');
 
+    // Usar valores del context
+    // eslint-disable-next-line
+    const [auth, guardarAuth] = useContext(CRMContext);
+
     
     //Cuando el componente carga
     useEffect(() => {
         // Consultar la API para traer el producto a editar
         const consultarAPI = async () => {
-            const productoConsulta = await clienteAxios.put(`/productos/${id}`);
+            const productoConsulta = await clienteAxios.get(`/productos/${id}`, {
+                headers : {
+                  'Authorization' : `Bearer ${auth.token}`
+                }
+              });
             // console.log(productoConsulta.data);
             guardarProducto(productoConsulta.data);
         }
@@ -35,7 +44,7 @@ function EditarProducto (props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    // edita uun producto en la db
+    // edita un producto en la db
     const editarProducto = async e => {
         e.preventDefault();
 
@@ -49,6 +58,7 @@ function EditarProducto (props) {
         try {
             const res = await clienteAxios.put(`/productos/${id}`, formData, {
                 headers: {
+                    'Authorization' : `Bearer ${auth.token}`,
                     'Content-Type' : 'multipart/form-data'
                 }
             });
